@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo HTTP - Preguntas</title>
+</head>
+
+<body>
+    <header>
+        <h1>Preguntas y referencias sobre protocolo HTTP</h1>
+    </header>
+
+    <section>
+        <h2>Sección de referencias de interés</h2>
+        <nav>
+            <ul>
+                <li title="HTTP AWS"><a href="https://aws.amazon.com/es/compare/the-difference-between-https-and-http/" target="_blank">http aws</a></li>
+                <li title="HTTP azion"><a href="https://www.azion.com/es/learning/ddos/que-es-http/" target="_blank">http azion</a></li>
+            </ul>
+        </nav>
+    </section>
+    <section>
+        <h2>Sección de Preguntas sobre HTTP</h2>
+        <ul>
+            <li>
+                <strong>Sobre que protocolo binario está montado el protocolo HTTP?</strong>
+                <ul>
+                    <li>Está montado sobre el protocolo de transporte TCP</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Cuáles son los clientes http y los servidores http más utilizados?</strong>
+                <ul>
+                    <li>Clientes HTTP: Navegadores web, Comandos CURL y Librerias nativas de desarrollo en distintos lenguajes</li>
+                    <li>Servidores HTTP: Apache, Nginx, Microsoft IIS</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Que verbos admite un comando en el requerimiento HTTP?</strong>
+                <ul>
+                    <li>Se usan en los web services:GET, PUT, DELETE, POST y CONNECT</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Que contenido lleva el body de un requerimiento HTTP?</strong>
+                <ul>
+                    <li>Datos de formularios, Archivos enviados al servidor y informacion en distintos formatos</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Que diferencia existe entre un URL y un URI?</strong>
+                <ul>
+                    <li>La URL incluye protocolo, host (eldominio si hay varios host) y el puerto y La URI contiene el recurso.</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Cómo se almacena información relacionada con las respuestas http?</strong>
+                <ul>
+                    <li>Se guardan los datos de las respuestas en una cookie.</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Que significa HTTP sobre conexiones preexistentes?</strong>
+                <ul>
+                    <li>Que se puede reutilizar la misma conexión TCP para hacer varios pedidos HTTP sin necesidad de abrir una nueva conexión para cada pedido.</li>
+                        </li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Que significa Virtual Hosting?</strong>
+                <ul>
+                    <li>
+                        Permite alojar varios dominios (sitios web) en un mismo servidor web, compartiendo la misma dirección IP y recursos del servidor.</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Que significa Cache por etag?</strong>
+                <ul>
+                    <li>
+                        Es un mecanismo de cacheo que permite a los servidores web identificar versiones específicas de un recurso mediante un identificador único (ETag). Cuando un cliente solicita un recurso, el servidor puede devolver el ETag junto con el recurso. En solicitudes posteriores, el cliente puede enviar el ETag al servidor para verificar si el recurso ha cambiado.
+                        Si no ha cambiado, el servidor puede responder con un código 304 Not Modified, lo que indica al cliente que use la versión en caché del recurso, mejorando así la eficiencia y reduciendo la carga en el servidor.
+                    </li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Porque el HTTP se considera STATE LESS?</strong>
+                <ul>
+                    <li>Porque cada requerimiento HTTP es independiente</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Que nueva versión de HTTP se está usando para mejorar la velocidad WEB?</strong>
+                <ul>
+                    <li>se utiliza http/2 que compacta los headers, multiplexea requests (manda varios sin esperar respuesta) y prioriza recursos</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                <strong>Cómo va a mejorar el comportamiento de una aplicación WEB en ambientes ruidosos o de débil conexión?</strong>
+                <ul>
+                    <li>HTTP/3 utilizando QUIC sobre UDP, permitiendo: conexiones mas rapidas, reconexiones automaticas si se pierde señal y mejora rendimiento en lugares con mala señal como aeropuertos.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Sección de imágenes representativas del protocolo</h2>
+        <img src="./httpfoto.png" alt="Imagen del Protocolo http">
+    </section>
+    <hr>
+    <section>
+        <h2>Sección de videos representativos del protocolo</h2>
+    <video controls style="height: 500px;" src="./httpvideo.mp4"></video>
+</section>
+<footer>
+    <h2>Datos del alumno</h2>
+    <p>Santos Perazzolo</p>
+    <p>La pampa 2037 17A</p>
+    <a href="mailto:santos.perazzolo@comunidad.ub.edu.ar">santos.perazzolo@comunidad.ub.edu.ar</a>  
+</footer>
+</body>
+</html>
