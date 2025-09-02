@@ -35,14 +35,12 @@
     </form>
 
     <script>
-      // Confirmación al enviar
       document.getElementById('form').addEventListener('submit', function (e) {
         if (!confirm('¿Está seguro de enviar el formulario?')) {
           e.preventDefault();
         }
       });
 
-      // Confirmación al blanquear
       document.getElementById('btnReset').addEventListener('click', function () {
         if (confirm('¿Desea blanquear el formulario?')) {
           document.getElementById('form').reset();
