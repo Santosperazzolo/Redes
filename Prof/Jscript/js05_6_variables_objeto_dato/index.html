@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Variable de tipo objeto de dato</title>
+    <style>
+      :root{ --azul:#9cc5de; --amarillo:#fff8cc; }
+      body{ font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin:16px; color:#111; }
+      h2{ margin:0 0 8px; }
+      .consignas{ border:2px solid var(--azul); padding:10px 12px; background:#f5fbff; }
+      .consignas ul{ margin:6px 0 0 18px; }
+      .fila{ display:flex; gap:12px; margin-top:10px; align-items:flex-start; }
+      .izq{ flex:1 1 720px; background:var(--amarillo); border:3px solid var(--azul); padding:12px; }
+      .der{ width:260px; border:2px solid var(--azul); }
+      .der header{ background:#eaf5fb; padding:6px 8px; border-bottom:1px solid var(--azul); font-weight:600; }
+      .der .btns{ display:flex; flex-wrap:wrap; gap:6px; padding:8px; }
+      .der button{ padding:6px 8px; }
+      label{ display:block; margin:8px 0 2px; font-size:14px; }
+      input[type="text"], input[type="date"]{ width: 320px; padding:6px; }
+      h3{ margin:10px 0 6px; }
+      #presentacion{ margin-top:12px; background:#fff; border:2px solid var(--azul); padding:8px; }
+      #presentacion[hidden]{ display:none; }
+      table{ border-collapse:collapse; width:100%; }
+      th,td{ border:1px solid #cbd6df; padding:6px 8px; text-align:left; }
+      caption{ text-align:left; font-weight:600; margin-bottom:6px; }
+      .total{ margin:6px 0; font-size:14px; color:#333; }
+    </style>
+  </head>
+  <body>
+    <h2>Consignas del ejercicio</h2>
+    <div class="consignas">
+      <ul>
+        <li>No usar jQuery.</li>
+        <li>Armar 3 contenedores: (1) Ingreso de datos, (2) Control y (3) Presentación en tabla.</li>
+        <li>Declarar y usar objetos de datos (tipo objeto) y un array.</li>
+        <li>Precargar 2 personas en el array por programa.</li>
+        <li>Ingresar datos por inputs (sin prompt y sin formulario).</li>
+        <li>Escribir la salida dentro de un contenedor, no con document.write.</li>
+        <li>Botones: crear persona (con validación), listar personas, ocultar presentación.</li>
+        <li>Para ocultar, cambiar el estilo display del contenedor de presentación.</li>
+      </ul>
+    </div>
+
+    <div class="fila">
+      <section class="izq" aria-label="Ingreso y Presentación">
+        <h3>Ingreso de datos de persona:</h3>
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" type="text" placeholder="Nombre" />
+
+        <label for="apellido">Apellido:</label>
+        <input id="apellido" type="text" placeholder="Apellido" />
+
+        <label for="fecha">Fecha de Nacimiento:</label>
+        <input id="fecha" type="date" />
+
+        <div id="errores" style="color:#b00020; margin-top:8px; font-size:14px;"></div>
+
+        <div id="presentacion" hidden></div>
+      </section>
+
+      <aside class="der" aria-label="Control">
+        <header>Control</header>
+        <div class="btns">
+          <button id="btnCrear">Crea persona</button>
+          <button id="btnListar">Lista personas</button>
+          <button id="btnOcultar">Oculta presentación</button>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      let objetoPersona = {};
+      objetoPersona = { nombre: "Pablo", apellido: "Galdi", fechaNac: "1956-07-01" };
+      let arregloPersonas = [objetoPersona];
+      arregloPersonas.push({ nombre: "Jose", apellido: "Witt", fechaNac: "1985-01-17" });
+      var objetoPersonas = { personas: arregloPersonas };
+
+      function validarCampos(nombre, apellido, fecha) {
+        const errores = [];
+        if (!nombre || !nombre.trim()) errores.push("El nombre es obligatorio.");
+        if (!apellido || !apellido.trim()) errores.push("El apellido es obligatorio.");
+        if (!fecha) errores.push("La fecha de nacimiento es obligatoria.");
+        return errores;
+      }
+
+      function crearPersona() {
+        const nombre = document.getElementById("nombre").value;
+        const apellido = document.getElementById("apellido").value;
+        const fecha = document.getElementById("fecha").value;
+        const salidaErrores = document.getElementById("errores");
+        const errores = validarCampos(nombre, apellido, fecha);
+        if (errores.length) { salidaErrores.textContent = errores.join(" "); return; }
+        salidaErrores.textContent = "";
+        objetoPersonas.personas.push({ nombre: nombre.trim(), apellido: apellido.trim(), fechaNac: fecha });
+        document.getElementById("nombre").value = "";
+        document.getElementById("apellido").value = "";
+        document.getElementById("fecha").value = "";
+        if (!document.getElementById("presentacion").hasAttribute("hidden")) listarPersonas();
+      }
+
+      function listarPersonas() {
+        const cont = document.getElementById("presentacion");
+        let html = ``;
+        html += `<div class="total">Total de personas: ${objetoPersonas.personas.length}</div>`;
+        html += `<table><caption>Personas</caption>`;
+        html += `<thead><tr><th>#</th><th>Nombre</th><th>Apellido</th><th>Fecha de Nacimiento</th></tr></thead><tbody>`;
+        objetoPersonas.personas.forEach(function(item, indice){
+          html += `<tr><td>${indice + 1}</td><td>${item.nombre}</td><td>${item.apellido}</td><td>${item.fechaNac}</td></tr>`;
+        });
+        html += `</tbody></table>`;
+        cont.innerHTML = html;
+        cont.removeAttribute("hidden");
+      }
+
+      function ocultarPresentacion() {
+        document.getElementById("presentacion").setAttribute("hidden", "");
+      }
+
+      document.getElementById("btnCrear").addEventListener("click", crearPersona);
+      document.getElementById("btnListar").addEventListener("click", listarPersonas);
+      document.getElementById("btnOcultar").addEventListener("click", ocultarPresentacion);
+    </script>
+  </body>
+  </html>
