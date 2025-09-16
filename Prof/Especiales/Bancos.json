@@ -1,1 +1,28 @@
-
+{
+  "Bancos": [
+    {
+      "CodBanco": 1,
+      "Descripcion": "BBVA",
+      "QR_Comprobante": "https://midominio.com/qr/bbva.png"
+    },
+    {
+      "CodBanco": 2,
+      "Descripcion": "Galicia",
+      "QR_Comprobante": "https://midominio.com/qr/galicia.png"
+    },
+    {
+      "CodBanco": 3,
+      "Descripcion": "BNA",
+      "QR_Comprobante": "https://midominio.com/qr/bna.png"
+    },
+    {
+      "CodBanco": 4,
+      "Descripcion": "Santander Río",
+      "QR_Comprobante": "https://midominio.com/qr/santander.png"
+    },
+    {
+      "CodBanco": 5,
+      "Descripcion": "HSBC",
+      "QR_Comprobante": "https://midominio.com/qr/hsbc.png"
+    }
+  ],
