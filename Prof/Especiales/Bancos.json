@@ -1,4 +1,5 @@
-"Bancos": [
+{
+  "Bancos": [
     {
       "CodBanco": 1,
       "Descripcion": "BBVA",
@@ -16,7 +17,7 @@
     },
     {
       "CodBanco": 4,
-      "Descripcion": "Santander Río",
+      "Descripcion": "Santander Rio",
       "QR_Comprobante": "https://midominio.com/qr/santander.png"
     },
     {
@@ -24,4 +25,5 @@
       "Descripcion": "HSBC",
       "QR_Comprobante": "https://midominio.com/qr/hsbc.png"
     }
-  ],
+  ]
+}
