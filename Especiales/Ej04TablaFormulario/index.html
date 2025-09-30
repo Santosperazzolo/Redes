@@ -562,7 +562,6 @@
             if (pagosData && Array.isArray(pagosData.PagoCuotasTransferencia)) {
               renderTabla(pagosData.PagoCuotasTransferencia);
             } else {
-              console.error('Formato de datos inválido o pagos.json no contiene PagoCuotasTransferencia como arreglo');
               resetTabla();
             }
           })
@@ -599,4 +598,5 @@
     });
   </script>
 </body>
+
 </html>
