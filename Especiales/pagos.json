@@ -1,0 +1,103 @@
+  "PagoCuotasTransferencia": [
+    {
+      "IdContrato": "2000",
+      "DNIDeudor": "30805980",
+      "Apellido_Nombres": "Pérez Juan",
+      "CuotaNro": 8,
+      "FechaPago": "2025-09-02",
+      "MontoPagado": 28550.69,
+      "CodBanco": 3,
+      "OR_ComprobanteDePago": "TRX954768"
+    },
+    {
+      "IdContrato": "2001",
+      "DNIDeudor": "30940076",
+      "Apellido_Nombres": "Gómez María",
+      "CuotaNro": 10,
+      "FechaPago": "2025-09-28",
+      "MontoPagado": 10223.51,
+      "CodBanco": 1,
+      "OR_ComprobanteDePago": "TRX151307"
+    },
+    {
+      "IdContrato": "2002",
+      "DNIDeudor": "30886907",
+      "Apellido_Nombres": "López Ana",
+      "CuotaNro": 4,
+      "FechaPago": "2025-09-12",
+      "MontoPagado": 26046.35,
+      "CodBanco": 5,
+      "OR_ComprobanteDePago": "TRX309194"
+    },
+    {
+      "IdContrato": "2003",
+      "DNIDeudor": "30581416",
+      "Apellido_Nombres": "Fernández Carlos",
+      "CuotaNro": 12,
+      "FechaPago": "2025-09-23",
+      "MontoPagado": 13524.08,
+      "CodBanco": 1,
+      "OR_ComprobanteDePago": "TRX217092"
+    },
+    {
+      "IdContrato": "2004",
+      "DNIDeudor": "30225706",
+      "Apellido_Nombres": "Martínez Laura",
+      "CuotaNro": 7,
+      "FechaPago": "2025-09-14",
+      "MontoPagado": 12471.65,
+      "CodBanco": 2,
+      "OR_ComprobanteDePago": "TRX151969"
+    },
+    {
+      "IdContrato": "2005",
+      "DNIDeudor": "30974339",
+      "Apellido_Nombres": "Ramírez José",
+      "CuotaNro": 10,
+      "FechaPago": "2025-09-04",
+      "MontoPagado": 26892.74,
+      "CodBanco": 2,
+      "OR_ComprobanteDePago": "TRX608378"
+    },
+    {
+      "IdContrato": "2006",
+      "DNIDeudor": "30600843",
+      "Apellido_Nombres": "Torres Sofía",
+      "CuotaNro": 10,
+      "FechaPago": "2025-09-26",
+      "MontoPagado": 26026.98,
+      "CodBanco": 2,
+      "OR_ComprobanteDePago": "TRX448617"
+    },
+    {
+      "IdContrato": "2007",
+      "DNIDeudor": "30559830",
+      "Apellido_Nombres": "Silva Martín",
+      "CuotaNro": 10,
+      "FechaPago": "2025-09-05",
+      "MontoPagado": 20199.01,
+      "CodBanco": 5,
+      "OR_ComprobanteDePago": "TRX719241"
+    },
+    {
+      "IdContrato": "2008",
+      "DNIDeudor": "30699560",
+      "Apellido_Nombres": "Acosta Daniela",
+      "CuotaNro": 12,
+      "FechaPago": "2025-09-13",
+      "MontoPagado": 21945.38,
+      "CodBanco": 2,
+      "OR_ComprobanteDePago": "TRX785437"
+    },
+    {
+      "IdContrato": "2009",
+      "DNIDeudor": "30851951",
+      "Apellido_Nombres": "Castro Pablo",
+      "CuotaNro": 10,
+      "FechaPago": "2025-09-20",
+      "MontoPagado": 19298.57,
+      "CodBanco": 2,
+      "OR_ComprobanteDePago": "TRX695042"
+    }
+  ]
+}

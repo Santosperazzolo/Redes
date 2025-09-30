@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JS05_1 - location</title>
+    <style>
+      body { font-family: Arial, Helvetica, sans-serif; color:#111; background:#fff; }
+      .row { margin: 16px; display:flex; gap:8px; }
+      button { padding: 6px 10px; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <button onclick="go('https://www.youtube.com/')">Youtube</button>
+      <button onclick="go('https://sourceforge.net/')">Source Force</button>
+      <button onclick="go('https://mail.google.com/')">Gmail</button>
+    </div>
+
+    <script>
+      function go(url){
+        window.location.assign(url);
+      }
+    </script>
+  </body>
+  </html>
+

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentencias simples en JavaScript</title>
+  </head>
+  <body>
+    <h1>Texto1 escrito directamente en HTML</h1>
+
+    <script>
+      document.write('<h2>Texto2. Mensaje escrito desde java script utilizando el metodo write().</h2>');
+      document.write('<p><strong>No pisa al documento porque aún no termino el flujo de escritura del navegador</strong></p>');
+    </script>
+
+    <script>
+      alert('Alert 3. Este mensaje de alerta es escrito desde un script del documento. Esta ventana de alerta es modal, lo que significa que el flujo de escritura del documento se interrumpe hasta el evento de aceptación; el navegador muestra esta ventana con anterioridad a la interpretación o renderización del documento.');
+    </script>
+
+    <h2>Texto 4 escrito en HTML escrito después de presentar el alert("3")</h2>
+ 
+    <script>
+      document.write('<h2>Texto5. Otra escritura con metodo write() aplicado al documento.</h2>');
+      document.write('<p><strong>El texto escrito con write no pisa al documento porque aún no termino el flujo de escritura del navegador</strong></p>');
+      document.write('<p><strong>El flujo de escritura sobre el navegador termina un tiempo determinado después de la lectura de la última línea del documento y de haber cerrado todas las ventanas modales de tipo alert().</strong></p>');
+    </script>
+
+    <script>
+      alert('Alert6. Escrito al final de todo el código');
+    </script>
+  </body>
+  </html>
+

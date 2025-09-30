@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ejercicio JS02_comando_en_evento</title>
+  </head>
+  <body>
+    <h1>Ejercicio JS02_comando_en_evento.html</h1>
+    <div class="buttons">
+      <button id="btnAlert">Click Aquí para ejecutar un alert</button>
+      <button id="btnWrite">Click Aquí para ejecutar un document.write()</button>
+    </div>
+
+    <script>
+      document.getElementById('btnAlert').addEventListener('click', function () {
+        alert('Alerta disparada desde el evento click');
+      });
+
+      document.getElementById('btnWrite').addEventListener('click', function () {
+        document.write('<h2>Contenido reemplazado con document.write() desde un evento</h2>');
+        document.write('<p>Este método sobreescribe el documento cuando se usa tras la carga.</p>');
+      });
+    </script>
+  </body>
+  </html>
+
