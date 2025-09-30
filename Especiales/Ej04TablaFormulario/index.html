@@ -557,23 +557,19 @@
         boton.prop('disabled', true);
         boton.text('Cargando...');
         
-        $.getJSON('Pagos.json')
-          .done(function(pagosData) {
-            if (pagosData && Array.isArray(pagosData.PagoCuotasTransferencia)) {
-              renderTabla(pagosData.PagoCuotasTransferencia);
-            } else {
-              resetTabla();
-            }
-          })
-          .fail(function(jqXHR, textStatus, errorThrown) {
-            console.error('Error al cargar pagos:', textStatus, errorThrown);
-            alert('Error al cargar el archivo pagos.json o el archivo no existe.');
-            resetTabla();
-          })
-          .always(function() {
-            boton.prop('disabled', false);
-            boton.text('Cargar datos');
-          });
+         $.get('Pagos.json', function(pagosData) {
+  if (pagosData && Array.isArray(pagosData.PagoCuotasTransferencia)) {
+    renderTabla(pagosData.PagoCuotasTransferencia);
+  } else {
+    resetTabla();
+  }
+}).fail(function() {
+  alert('Error al cargar el archivo pagos.json');
+  resetTabla();
+}).always(function() {
+  boton.disabled = false;
+  boton.textContent = 'Cargar datos';
+});
       });
 
       $('#btAccionVaciar').click(function() {
