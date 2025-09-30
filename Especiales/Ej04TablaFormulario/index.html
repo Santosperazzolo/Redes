@@ -554,8 +554,6 @@
 
       $('#btAccionCarga').click(function() {
         const boton = $(this);
-        boton.prop('disabled', true);
-        boton.text('Cargando...');
         
          $.get('Pagos.json', function(pagosData) {
           if (pagosData && Array.isArray(pagosData.PagoCuotasTransferencia)) {
@@ -596,4 +594,5 @@
 </body>
 
 </html>
+
 
