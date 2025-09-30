@@ -84,6 +84,11 @@
       filter: brightness(1.05);
     }
 
+    .actions button:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--button-shadow);
+    }
+
     .modal {
       position: fixed;
       inset: 0;
@@ -131,6 +136,13 @@
       font-size: 1.55rem;
       line-height: 1;
       cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+    }
+
+    .modal__close:hover {
+      opacity: 0.7;
     }
 
     .modal__body {
@@ -157,6 +169,7 @@
       flex: 1;
       display: flex;
       padding: 22px clamp(28px, 7vw, 88px) 28px;
+      overflow: hidden;
     }
 
     .table-panel {
@@ -169,10 +182,21 @@
       overflow: hidden;
     }
 
+    .table-wrapper {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: auto;
+    }
+
     table {
       width: 100%;
-      height: 100%;
       border-collapse: collapse;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     thead th {
@@ -183,6 +207,7 @@
       padding: 18px 22px;
       border-bottom: 2px solid var(--panel-border);
       font-size: 1.05rem;
+      text-align: left;
     }
 
     tbody {
@@ -209,7 +234,13 @@
 
     tbody .filler div {
       height: 100%;
+      min-height: 200px;
       background: var(--table-filler-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(0, 0, 0, 0.3);
+      font-size: 1.2rem;
     }
 
     td.numero {
@@ -226,6 +257,7 @@
       padding: 16px 18px;
       border-top: 2px solid var(--panel-border);
       letter-spacing: 0.04em;
+      font-weight: bold;
     }
 
     footer {
@@ -244,8 +276,28 @@
         gap: 16px;
       }
 
+      header h1 {
+        font-size: 1.5rem;
+      }
+
       .actions button {
         min-width: 160px;
+        font-size: 0.95rem;
+      }
+
+      thead th {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+      }
+
+      tbody td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+      }
+
+      tfoot td {
+        padding: 12px 10px;
+        font-size: 0.85rem;
       }
     }
   </style>
@@ -255,11 +307,12 @@
     <header>
       <h1>Pagos</h1>
       <div class="actions">
-        <button type="button" id="loadBtn">Cargar datos</button>
-        <button type="button" id="clearBtn">Vaciar datos</button>
-        <button type="button" id="formBtn">Cargar Form</button>
+        <button type="button" id="btAccionCarga">Cargar datos</button>
+        <button type="button" id="btAccionVaciar">Vaciar datos</button>
+        <button type="button" id="btAccionForm">Cargar Form</button>
       </div>
     </header>
+
     <div class="modal" id="formModal" role="dialog" aria-modal="true" aria-labelledby="formModalTitle" aria-hidden="true">
       <div class="modal__dialog">
         <div class="modal__header">
@@ -271,272 +324,279 @@
         </div>
       </div>
     </div>
+
     <main>
       <section class="table-panel" aria-live="polite">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">ID Contrato</th>
+                <th scope="col">DNI Deudor</th>
+                <th scope="col">Cuota Nro</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Fecha Pago</th>
+                <th scope="col">Monto Pagado</th>
+              </tr>
+            </thead>
+            <tbody id="tbDatos">
+              <tr class="filler">
+                <td colspan="6"><div>No hay datos cargados</div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <table>
-          <thead>
-            <tr>
-              <th scope="col">CodArt</th>
-              <th scope="col">Familia</th>
-              <th scope="col">UM</th>
-              <th scope="col">Descripcion</th>
-              <th scope="col">Fecha Alta</th>
-              <th scope="col">Saldo Stock</th>
-            </tr>
-          </thead>
-          <tbody id="tablaBody">
-            <tr class="filler">
-              <td colspan="6"><div></div></td>
-            </tr>
-          </tbody>
           <tfoot>
             <tr>
-              <td id="sumCodArt">sum codArt</td>
-              <td id="sumFamilia">sum familia</td>
-              <td id="sumUm">sum um</td>
-              <td id="sumDescripcion">sum descripcion</td>
-              <td id="sumFechaAlta">sum fecha alta</td>
-              <td id="sumSaldoStock">sum saldo Stock</td>
+              <td id="sumCodArt">Contratos: 0</td>
+              <td id="sumFamilia">DNIs: 0</td>
+              <td id="sumUm">Cuotas: 0</td>
+              <td id="sumDescripcion">Clientes: 0</td>
+              <td id="sumFechaAlta">Sin fechas</td>
+              <td id="sumSaldoStock">Total: $0,00</td>
             </tr>
           </tfoot>
         </table>
       </section>
     </main>
-    <footer>Pie</footer>
+
+    <footer>Sistema de Gestión de Pagos</footer>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
-    const tablaBody = document.getElementById('tablaBody');
-    const loadBtn = document.getElementById('loadBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const formBtn = document.getElementById('formBtn');
-    const formModal = document.getElementById('formModal');
-    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    $(document).ready(function() {
+      const currencyFormatter = new Intl.NumberFormat('es-AR', {
+        style: 'currency',
+        currency: 'ARS',
+        minimumFractionDigits: 2
+      });
 
-    const sumCodArt = document.getElementById('sumCodArt');
-    const sumFamilia = document.getElementById('sumFamilia');
-    const sumUm = document.getElementById('sumUm');
-    const sumDescripcion = document.getElementById('sumDescripcion');
-    const sumFechaAlta = document.getElementById('sumFechaAlta');
-    const sumSaldoStock = document.getElementById('sumSaldoStock');
+      const integerFormatter = new Intl.NumberFormat('es-AR');
 
-    const FILLER_ROW = '<tr class="filler"><td colspan="6"><div></div></td></tr>';
+      let formModalKeyHandler = null;
+      let lastFocusedBeforeModal = null;
 
-    const currencyFormatter = new Intl.NumberFormat('es-AR', {
-      style: 'currency',
-      currency: 'ARS',
-      minimumFractionDigits: 2
-    });
-
-    const integerFormatter = new Intl.NumberFormat('es-AR');
-
-    let formModalKeyHandler = null;
-    let lastFocusedBeforeModal = null;
-
-    function openFormModal() {
-      if (!formModal) {
-        return;
-      }
-      if (formModal.classList.contains('is-visible')) {
-        return;
-      }
-      lastFocusedBeforeModal = document.activeElement;
-      formModal.classList.add('is-visible');
-      formModal.setAttribute('aria-hidden', 'false');
-      formModalKeyHandler = (event) => {
-        if (event.key === 'Escape') {
-          event.preventDefault();
-          closeFormModal();
+      function openFormModal() {
+        const formModal = $('#formModal');
+        if (formModal.hasClass('is-visible')) {
+          return;
         }
-      };
-      document.addEventListener('keydown', formModalKeyHandler);
-      requestAnimationFrame(() => {
-        modalCloseBtn?.focus();
+        lastFocusedBeforeModal = document.activeElement;
+        formModal.attr('class', 'modal is-visible');
+        formModal.attr('aria-hidden', 'false');
+        
+        formModalKeyHandler = function(event) {
+          if (event.key === 'Escape') {
+            event.preventDefault();
+            closeFormModal();
+          }
+        };
+        $(document).on('keydown', formModalKeyHandler);
+        
+        setTimeout(function() {
+          $('#modalCloseBtn').focus();
+        }, 100);
+      }
+
+      function closeFormModal() {
+        const formModal = $('#formModal');
+        formModal.attr('class', 'modal');
+        formModal.attr('aria-hidden', 'true');
+        
+        if (formModalKeyHandler) {
+          $(document).off('keydown', formModalKeyHandler);
+          formModalKeyHandler = null;
+        }
+        
+        if (lastFocusedBeforeModal) {
+          lastFocusedBeforeModal.focus();
+        } else {
+          $('#btAccionForm').focus();
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatearFecha(valor) {
+        if (!valor) {
+          return '';
+        }
+        const fecha = new Date(valor);
+        return isNaN(fecha.getTime()) ? escapeHtml(valor) : fecha.toLocaleDateString('es-AR');
+      }
+
+      function obtenerFechaMasReciente(actual, candidata) {
+        if (!candidata) {
+          return actual;
+        }
+        if (!actual) {
+          return candidata;
+        }
+        const fechaActual = new Date(actual);
+        const fechaCandidata = new Date(candidata);
+        
+        if (isNaN(fechaActual.getTime()) || isNaN(fechaCandidata.getTime())) {
+          return actual;
+        }
+        return fechaCandidata > fechaActual ? candidata : actual;
+      }
+
+      function resetTabla() {
+        $('#tbDatos').empty();
+        const fillerRow = '<tr class="filler"><td colspan="6"><div>No hay datos cargados</div></td></tr>';
+        $('#tbDatos').append(fillerRow);
+        resetFooter();
+      }
+
+      function resetFooter() {
+        $('#sumCodArt').text('Contratos: 0');
+        $('#sumFamilia').text('DNIs: 0');
+        $('#sumUm').text('Cuotas: 0');
+        $('#sumDescripcion').text('Clientes: 0');
+        $('#sumFechaAlta').text('Sin fechas');
+        $('#sumSaldoStock').text('Total: $0,00');
+      }
+
+      function actualizarFooter(datos) {
+        $('#sumCodArt').text('Contratos: ' + integerFormatter.format(datos.contratos));
+        $('#sumFamilia').text('DNIs: ' + integerFormatter.format(datos.dnis));
+        $('#sumUm').text('Cuotas: ' + integerFormatter.format(datos.cuotasTotal));
+        $('#sumDescripcion').text('Clientes: ' + integerFormatter.format(datos.clientes));
+        $('#sumFechaAlta').text(datos.fechaReciente ? 'Último pago: ' + formatearFecha(datos.fechaReciente) : 'Sin fechas');
+        $('#sumSaldoStock').text('Total: ' + currencyFormatter.format(datos.montoTotal));
+      }
+
+      function renderTabla(data) {
+        if (!data || data.length === 0) {
+          resetTabla();
+          return;
+        }
+
+        $('#tbDatos').empty();
+
+        const contratos = new Set();
+        const dnis = new Set();
+        const clientes = new Set();
+        let cuotasTotal = 0;
+        let montoTotal = 0;
+        let fechaReciente = '';
+
+        data.forEach(function(pago) {
+          const contrato = pago.IdContrato;
+          const dni = pago.DNIDeudor;
+          const cuota = Number(pago.CuotaNro) || 0;
+          const cliente = pago.Apellido_Nombres;
+          const fechaPago = pago.FechaPago;
+          const monto = Number(pago.MontoPagado) || 0;
+
+          if (contrato) contratos.add(contrato);
+          if (dni) dnis.add(dni);
+          if (cliente) clientes.add(cliente);
+          cuotasTotal += cuota;
+          montoTotal += monto;
+          fechaReciente = obtenerFechaMasReciente(fechaReciente, fechaPago);
+
+          const objTr = document.createElement('tr');
+          
+          const objTd1 = document.createElement('td');
+          objTd1.setAttribute('campo-dato', 'IdContrato');
+          objTd1.innerHTML = escapeHtml(contrato);
+          objTr.appendChild(objTd1);
+
+          const objTd2 = document.createElement('td');
+          objTd2.setAttribute('campo-dato', 'DNIDeudor');
+          objTd2.innerHTML = escapeHtml(dni);
+          objTr.appendChild(objTd2);
+
+          const objTd3 = document.createElement('td');
+          objTd3.setAttribute('campo-dato', 'CuotaNro');
+          objTd3.setAttribute('class', 'numero');
+          objTd3.innerHTML = integerFormatter.format(cuota);
+          objTr.appendChild(objTd3);
+
+          const objTd4 = document.createElement('td');
+          objTd4.setAttribute('campo-dato', 'Apellido_Nombres');
+          objTd4.innerHTML = escapeHtml(cliente);
+          objTr.appendChild(objTd4);
+
+          const objTd5 = document.createElement('td');
+          objTd5.setAttribute('campo-dato', 'FechaPago');
+          objTd5.innerHTML = formatearFecha(fechaPago);
+          objTr.appendChild(objTd5);
+
+          const objTd6 = document.createElement('td');
+          objTd6.setAttribute('campo-dato', 'MontoPagado');
+          objTd6.setAttribute('class', 'numero');
+          objTd6.innerHTML = currencyFormatter.format(monto);
+          objTr.appendChild(objTd6);
+
+          $('#tbDatos').append(objTr);
+        });
+
+        actualizarFooter({
+          contratos: contratos.size,
+          dnis: dnis.size,
+          cuotasTotal: cuotasTotal,
+          clientes: clientes.size,
+          fechaReciente: fechaReciente,
+          montoTotal: montoTotal
+        });
+      }
+
+      $('#btAccionCarga').click(function() {
+        const boton = $(this);
+        boton.prop('disabled', true);
+        boton.text('Cargando...');
+        
+        $.getJSON('Pagos.json')
+          .done(function(pagosData) {
+            if (pagosData && Array.isArray(pagosData.PagoCuotasTransferencia)) {
+              renderTabla(pagosData.PagoCuotasTransferencia);
+            } else {
+              console.error('Formato de datos inválido o pagos.json no contiene PagoCuotasTransferencia como arreglo');
+              resetTabla();
+            }
+          })
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Error al cargar pagos:', textStatus, errorThrown);
+            alert('Error al cargar el archivo pagos.json o el archivo no existe.');
+            resetTabla();
+          })
+          .always(function() {
+            boton.prop('disabled', false);
+            boton.text('Cargar datos');
+          });
       });
-    }
 
-    function closeFormModal() {
-      if (!formModal) {
-        return;
-      }
-      formModal.classList.remove('is-visible');
-      formModal.setAttribute('aria-hidden', 'true');
-      if (formModalKeyHandler) {
-        document.removeEventListener('keydown', formModalKeyHandler);
-        formModalKeyHandler = null;
-      }
-      if (lastFocusedBeforeModal instanceof HTMLElement) {
-        lastFocusedBeforeModal.focus();
-      } else if (formBtn) {
-        formBtn.focus();
-      }
-    }
-
-    function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    function formatearFecha(valor) {
-      if (!valor) {
-        return '';
-      }
-      const fecha = new Date(valor);
-      return Number.isNaN(fecha.getTime()) ? escapeHtml(valor) : fecha.toLocaleDateString('es-AR');
-    }
-
-    function obtenerFechaMasReciente(actual, candidata) {
-      if (!candidata) {
-        return actual;
-      }
-      if (!actual) {
-        return candidata;
-      }
-      const fechaActual = new Date(actual);
-      const fechaCandidata = new Date(candidata);
-      if (Number.isNaN(fechaActual.getTime()) || Number.isNaN(fechaCandidata.getTime())) {
-        return actual;
-      }
-      return fechaCandidata > fechaActual ? candidata : actual;
-    }
-
-    function resetTabla() {
-      tablaBody.innerHTML = FILLER_ROW;
-      resetFooter();
-    }
-
-    function resetFooter() {
-      sumCodArt.textContent = 'sum codArt';
-      sumFamilia.textContent = 'sum familia';
-      sumUm.textContent = 'sum um';
-      sumDescripcion.textContent = 'sum descripcion';
-      sumFechaAlta.textContent = 'sum fecha alta';
-      sumSaldoStock.textContent = 'sum saldo Stock';
-    }
-
-    function actualizarFooter({ contratos, dnis, cuotasTotal, clientes, fechaReciente, montoTotal }) {
-      sumCodArt.textContent = `Contratos: ${integerFormatter.format(contratos)}`;
-      sumFamilia.textContent = `DNIs distintos: ${integerFormatter.format(dnis)}`;
-      sumUm.textContent = `Total cuotas: ${integerFormatter.format(cuotasTotal)}`;
-      sumDescripcion.textContent = `Clientes: ${integerFormatter.format(clientes)}`;
-      sumFechaAlta.textContent = fechaReciente ? `Ultimo pago: ${formatearFecha(fechaReciente)}` : 'Sin fechas';
-      sumSaldoStock.textContent = `Monto total: ${currencyFormatter.format(montoTotal)}`;
-    }
-
-    function renderTabla(data) {
-      if (!data.length) {
+      $('#btAccionVaciar').click(function() {
         resetTabla();
-        return;
-      }
-
-      const fragment = document.createDocumentFragment();
-      const contratos = new Set();
-      const dnis = new Set();
-      const clientes = new Set();
-      let cuotasTotal = 0;
-      let montoTotal = 0;
-      let fechaReciente = '';
-
-      data.forEach((pago) => {
-        const contrato = pago?.IdContrato;
-        const dni = pago?.DNIDeudor;
-        const cuota = Number(pago?.CuotaNro) || 0;
-        const cliente = pago?.Apellido_Nombres;
-        const fechaPago = pago?.FechaPago;
-        const monto = Number(pago?.MontoPagado) || 0;
-
-        contratos.add(contrato);
-        dnis.add(dni);
-        clientes.add(cliente);
-        cuotasTotal += cuota;
-        montoTotal += monto;
-        fechaReciente = obtenerFechaMasReciente(fechaReciente, fechaPago);
-
-        const fila = document.createElement('tr');
-        fila.innerHTML = `
-          <td>${escapeHtml(contrato)}</td>
-          <td>${escapeHtml(dni)}</td>
-          <td class="numero">${integerFormatter.format(cuota)}</td>
-          <td>${escapeHtml(cliente)}</td>
-          <td>${formatearFecha(fechaPago)}</td>
-          <td class="numero">${currencyFormatter.format(monto)}</td>
-        `;
-        fragment.appendChild(fila);
       });
 
-      tablaBody.innerHTML = '';
-      tablaBody.appendChild(fragment);
-
-      actualizarFooter({
-        contratos: contratos.size,
-        dnis: dnis.size,
-        cuotasTotal,
-        clientes: clientes.size,
-        fechaReciente,
-        montoTotal
-      });
-    }
-
-     src="pagos.json">
-document.addEventListener("DOMContentLoaded", function(){
-  const tablaBody = document.getElementById("tablaBody");
-
-  // Botón cargar
-  document.getElementById("loadBtn").addEventListener("click", function(){
-    tablaBody.innerHTML = "";
-    pagosData.PagoCuotasTransferencia.forEach(pago => {
-      tablaBody.innerHTML += `
-        <tr>
-          <td>${pago.IdContrato}</td>
-          <td>${pago.DNIDeudor}</td>
-          <td>${pago.CuotaNro}</td>
-          <td>${pago.Apellido_Nombres}</td>
-          <td>${pago.FechaPago}</td>
-          <td>${pago.MontoPagado}</td>
-        </tr>
-      `;
-    });
-  });
-
-  // Botón vaciar
-  document.getElementById("clearBtn").addEventListener("click", function(){
-    tablaBody.innerHTML = "";
-  });
-});
-
-    if (formBtn) {
-      formBtn.addEventListener('click', () => {
+      $('#btAccionForm').click(function() {
         openFormModal();
       });
-    }
 
-    if (formModal) {
-      formModal.addEventListener('click', (event) => {
-        if (event.target === formModal) {
+      $('#formModal').click(function(event) {
+        if (event.target === this) {
           closeFormModal();
         }
       });
-    }
 
-    if (modalCloseBtn) {
-      modalCloseBtn.addEventListener('click', () => {
+      $('#modalCloseBtn').click(function() {
         closeFormModal();
       });
-    }
 
-    loadBtn.addEventListener('click', cargarPagos);
-    clearBtn.addEventListener('click', () => {
       resetTabla();
     });
-
-    resetTabla();
   </script>
 </body>
 </html>
-
-
-
