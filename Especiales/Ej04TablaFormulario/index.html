@@ -558,11 +558,11 @@
         boton.text('Cargando...');
         
          $.get('Pagos.json', function(pagosData) {
-  if (pagosData && Array.isArray(pagosData.PagoCuotasTransferencia)) {
-    renderTabla(pagosData.PagoCuotasTransferencia);
-  } else {
-    resetTabla();
-  }
+          if (pagosData && Array.isArray(pagosData.PagoCuotasTransferencia)) {
+             renderTabla(pagosData.PagoCuotasTransferencia);
+        } else {
+          resetTabla();
+        }
 }).fail(function() {
   alert('Error al cargar el archivo pagos.json');
   resetTabla();
@@ -596,3 +596,4 @@
 </body>
 
 </html>
+
